@@ -4,6 +4,8 @@ import { collection, getDocs } from "firebase/firestore/lite";
 import { nanoid } from "nanoid";
 import { Contact } from "../Components/Contact";
 import { app } from "./Login";
+// import { useAppDispatch, useAppSelector } from "../app/hooks";
+// import { fetchContacts } from "../app/actions/fetchContacts";
 
 export const db = getFirestore(app);
 
@@ -12,6 +14,8 @@ interface DocumentData {
 }
 
 export const ContactsPage = () => {
+  // const dispatch = useAppDispatch();
+  // const contactsRedux = useAppSelector((state) => state.contacts);
   const [contacts, setContacts] = useState<DocumentData[]>([]);
   const [searchContacts, setSearchContacts] = useState(contacts);
   const [search, setSearch] = useState("");
@@ -152,23 +156,21 @@ export const ContactsPage = () => {
             </button>
           </form>
         </div>
-        {searchContacts && searchContacts.length > 0 ? (
-          isLoading ? (
-            <div className="progress cyan lighten-1">
-              <div className="indeterminate"></div>
-            </div>
-          ) : (
-            <ul className="collection container">
-              {searchContacts.map((contact) => (
-                <Contact
-                  contact={contact}
-                  key={contact.id}
-                  fetchData={fetchData}
-                  setId={setId}
-                />
-              ))}
-            </ul>
-          )
+        {isLoading ? (
+          <div className="progress cyan lighten-1">
+            <div className="indeterminate"></div>
+          </div>
+        ) : searchContacts && searchContacts.length > 0 ? (
+          <ul className="collection container">
+            {searchContacts.map((contact) => (
+              <Contact
+                contact={contact}
+                key={contact.id}
+                fetchData={fetchData}
+                setId={setId}
+              />
+            ))}
+          </ul>
         ) : (
           <h4 className="center-align">Contact not found!</h4>
         )}
